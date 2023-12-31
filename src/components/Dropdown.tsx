@@ -42,7 +42,7 @@ const Dropdown = ({
           !isDropdownOpen && "hidden"
         } `}
       >
-        <ul className="h-48 py-2 px-1  overflow-y-auto text-gray-700 dark:text-gray-200">
+        <ul className="h-48 py-2 px-1  overflow-y-auto text-gray-700 ">
           {data.map((option, index) => {
             //console.log(option.title);
             return (

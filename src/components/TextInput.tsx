@@ -52,7 +52,7 @@ const TextInput = ({
           </h4>
         )}
         <input
-          className="w-full rounded-md h-9 border-gray-200 border-[1px] focus:outline-primary px-2 focus:outline-none"
+          className="w-full rounded-md h-9 bg-white border-gray-200 border-[1px] focus:outline-primary px-2 focus:outline-none"
           type={type}
           value={value}
           onChange={onChangeHandler}
