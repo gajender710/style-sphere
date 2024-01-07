@@ -14,6 +14,7 @@ function Nav() {
             <img src={Logo} className="h-8 w-28 object-contain " />
           </h1>
         </Link>
+        <h2>test</h2>
         <div className="relative mr-8">
           <Link to="/cart" className="relative ">
             <FaShoppingCart className="text-primary w-6 m-auto" />
