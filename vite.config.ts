@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 
-const manifestForPlugin : any = {
+const manifestForPlugin :  Partial<VitePWAOptions> = {
   registerType:"prompt",
   includeAssets:['favicon.png', "apple-touch-icon.png"],
   manifest:{
@@ -34,24 +34,23 @@ const manifestForPlugin : any = {
       purpose:'any maskable',
     }
   ],
-  theme_color:'#181818',
-  background_color:'#e0cc3b',
+  theme_color:'#0B1251',
+  background_color:'#ffffff',
   display:"standalone",
   scope:'/',
   start_url:"/",
   orientation:'portrait'
   },
+  devOptions: {
+    enabled: true,
+  },
 };
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
   envDir: './env-config',
-  plugins: [react(),VitePWA({manifest:{icons:[{
-    src: '/android-chrome-512x512.png',
-    sizes:'512x512',
-    type:'image/png',
-    purpose:'any maskable',
-  }]},registerType:"prompt"})],
+  plugins: [react(),VitePWA(manifestForPlugin)],
   resolve: {
     alias: [{ find: '@', replacement: '/src' }],
   },
