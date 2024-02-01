@@ -1,6 +1,6 @@
 import { DropdownOption } from "./dropdownModel";
 
-export interface OrderDetail {
+export interface RazorOrderDetail {
     id: string;
     entity: string;
     amount: number;
@@ -16,12 +16,30 @@ export interface OrderDetail {
 } 
 
 export interface CheckoutDetailForm {
-    name: string;
     address: string;
     city: string;
     cState: DropdownOption | null;
     landmark: string;
     pincode: string;
-    email: string;
     mobile_number: string;
   }
+
+
+
+export interface OrderItem {
+    order: string;
+    productId: string;
+    title: string;
+    category: string;
+    quantity: number;
+    price: number;
+}
+
+export interface Order {
+    orderId: string;
+    user: string;
+    orderDate: string;
+    totalAmount: number;
+    status: string;
+    orderItems:OrderItem[]
+}

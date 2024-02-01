@@ -1,4 +1,5 @@
 
+import useAuthStore from '@/store/auth';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
@@ -8,8 +9,6 @@ const headers: Readonly<Record<string, string | boolean>> = {
   Accept: 'application/json',
   // 'Content-Type': 'application/json; charset=utf-8',
 };
-
-
 
 class NetworkClient {
   public instance: AxiosInstance | null = null;
@@ -40,8 +39,7 @@ class NetworkClient {
     return Promise.reject(code);
   }
 
-  private async closeSession() {
-    
+  private async closeSession() {  
     return Promise.resolve(true);
   }
 
@@ -54,7 +52,19 @@ class NetworkClient {
 
     axiosInstance.interceptors.request.use(
       (config) => {
-       
+        const authToken = useAuthStore.getState().authToken;
+        console.log(authToken,"--auth token")
+        if(!!authToken){
+          const authHeader = `Bearer ${authToken}`;
+          // @ts-ignore
+          const updatedHeaders: AxiosRequestHeaders = {
+            ...config.headers,
+            Authorization: authHeader,
+          };
+          config.headers = updatedHeaders;
+          console.log(config,"config")
+        }
+
         return config;
       },
       (error) => {

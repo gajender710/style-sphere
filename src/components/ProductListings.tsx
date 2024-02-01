@@ -5,10 +5,6 @@ import { ProductItem } from "@/models/homeModel";
 
 function ProductListings({ products }: Props) {
   const navigate = useNavigate();
-  // const title = product.node.title;
-  // const description = product.node.description;
-  // const price = product.node.variants.edges[0].node.price;
-  console.log(products, "products");
 
   const onProductSelect = (item: ProductItem) => {
     navigate(`product/${item.id}`, { state: item });

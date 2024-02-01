@@ -8,6 +8,8 @@ const TextInput = ({
   required = false,
   type = "text",
   showError = true,
+  placeholder = "",
+  disabled = false,
 }: TextInputProps) => {
   const [update, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -41,7 +43,7 @@ const TextInput = ({
 
   return (
     <div className="w-full ">
-      <h2 className="mb-1 font-medium text-sm capitalize">
+      <h2 className="mb-1 font-medium text-sm capitalize text-gray-600">
         {label}
         {required && <span className="text-red-500  ml-1">*</span>}
       </h2>
@@ -52,11 +54,13 @@ const TextInput = ({
           </h4>
         )}
         <input
-          className="w-full rounded-md h-9 bg-white border-gray-200 border-[1px] focus:outline-primary px-2 focus:outline-none"
+          className={`w-full rounded-md h-9 bg-white border-gray-200 border-[1px] px-2 focus:outline-none focus:border-gray-500 disabled:bg-gray-200 disabled:text-gray-500`}
           type={type}
           value={value}
           onChange={onChangeHandler}
           onBlur={!validator ? undefined : showValidationMessage}
+          placeholder={placeholder}
+          disabled={disabled}
         />
       </div>
       {showError && (
@@ -74,8 +78,10 @@ interface TextInputProps {
   validator?: any;
   onChangeText: (val: string) => void;
   required?: boolean;
-  type?: "text" | "mobile_number" | "email";
+  type?: "text" | "mobile_number" | "email" | "password";
   showError?: boolean;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
 export default TextInput;

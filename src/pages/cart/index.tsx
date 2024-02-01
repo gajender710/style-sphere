@@ -10,11 +10,8 @@ import { useState, useEffect } from "react";
 import useCartStore from "@/store/cart";
 import clsx from "clsx";
 
-const calculateSubTotal = () => {};
-
 function CartPage() {
   const { cart, removeFromCart, addToCart } = useCartStore((state) => state);
-  const [cartItems, setCartItems] = useState([]);
   const [subtotal, setSubtotal] = useState(
     cart?.reduce((acc, it) => acc + it.price * (it.quantity ?? 1), 0) ?? 0
   );
@@ -126,7 +123,7 @@ function CartPage() {
 
       <div className="w-2/4 max-w-xs">
         <Link
-          to={"/checkout"}
+          to={"/user/checkout"}
           aria-label="checkout-products"
           className={clsx([
             "bg-primary text-white hover:text-white text-lg font-primary font-semibold pt-2 pb-1 leading-relaxed flex justify-center items-center focus:ring-1 focus:outline-none w-full rounded-sm mb-2",

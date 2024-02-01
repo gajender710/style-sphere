@@ -3,7 +3,7 @@ import { ProductItem } from "@/models/homeModel";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 
-import { useState, useEffect, useReducer, Reducer, useRef } from "react";
+import { useReducer, Reducer, useRef } from "react";
 import useCartStore from "@/store/cart";
 import clsx from "clsx";
 import Dropdown from "@/components/Dropdown";
@@ -12,13 +12,13 @@ import { DropdownOption } from "@/models/dropdownModel";
 import TextInput from "@/components/TextInput";
 import SimpleReactValidator from "simple-react-validator";
 import orderServices from "@/services/order-services";
-import { CheckoutDetailForm, OrderDetail } from "@/models/orderModel";
+import { CheckoutDetailForm, RazorOrderDetail } from "@/models/orderModel";
 import toast from "react-hot-toast";
 import { orderMapper } from "@/utils/helpers";
+import useAuthStore from "@/store/auth";
 
 const cStateOptions = states.map((item, index) => ({ ...item, id: index }));
 const initialState = {
-  name: "",
   address: "",
   city: "",
   cState: null,
@@ -44,6 +44,7 @@ const getPriceDetail = (cart: ProductItem[]) => {
 
 function CheckoutPage() {
   const navigate = useNavigate();
+  const { userDetail } = useAuthStore((state) => state);
   const { cart, resetCart } = useCartStore((state) => state);
   const priceDetails = useRef(getPriceDetail(cart));
 
@@ -64,33 +65,27 @@ function CheckoutPage() {
     CheckoutDetailForm
   >(reducer, initialState, () => initialState);
 
-  const {
-    name,
-    address,
-    city,
-    cState,
-    landmark,
-    email,
-    mobile_number,
-    pincode,
-  } = state;
+  const { address, city, cState, landmark, mobile_number, pincode } = state;
 
   const checkout = async () => {
     if (!validator.current.allValid() || !cState) {
       validator.current.showMessages();
       await toast.error("Validation error");
-      dispatch({ type: "name", value: name });
+      dispatch({ type: "address", value: address });
       return;
     }
     try {
       const formattedFormDetail = orderMapper(state);
       const payload = {
-        user_form: formattedFormDetail,
+        user_form: {
+          ...formattedFormDetail,
+          email: userDetail.email,
+        },
         cart_items: cart,
       };
       const response = await orderServices.checkout(payload);
       const keyResponse = await orderServices.getRazorpayKey();
-      const data: OrderDetail = response.data;
+      const data: RazorOrderDetail = response.data;
 
       var options = {
         key: keyResponse.key,
@@ -119,7 +114,7 @@ function CheckoutPage() {
         },
         prefill: {
           name: name,
-          email: email,
+          email: userDetail.email,
           contact: mobile_number,
         },
 
@@ -128,13 +123,14 @@ function CheckoutPage() {
         },
       };
       console.log(options, "data");
-
       const razor = new (window as any).Razorpay(options);
       razor.open();
     } catch (error) {
       console.error("razorpay error");
     }
   };
+
+  console.log(userDetail, "userdetail");
 
   if (!cart.length) {
     return (
@@ -154,22 +150,6 @@ function CheckoutPage() {
       <h1 className="font-bold text-xl self-center mb-6">GETTING YOUR ORDER</h1>
       <div className="flex w-full flex-col lg:flex-row justify-between">
         <div className="flex w-full lg:w-1/2 flex-col h-full space-y-2 ">
-          <TextInput
-            label="name"
-            value={name}
-            required
-            onChangeText={(val) => dispatch({ type: "name", value: val })}
-            validator={[validator, "required|alpha_space"]}
-          />
-
-          <TextInput
-            label="email"
-            value={email}
-            required
-            onChangeText={(val) => dispatch({ type: "email", value: val })}
-            validator={[validator, "required|email"]}
-          />
-
           <TextInput
             label="mobile number"
             value={mobile_number}
