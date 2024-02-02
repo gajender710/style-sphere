@@ -1,6 +1,7 @@
 import PageTitle from "@/components/PageTitle";
 import TextInput from "@/components/TextInput";
 import authServices from "@/services/auth-services";
+import useAuthStore from "@/store/auth";
 import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -38,7 +39,11 @@ const SignUp = () => {
         password: loginData.password,
       };
       const response = await authServices.signUp(payload);
-      console.log(document?.cookie, "cooookiees");
+      useAuthStore.setState({
+        authToken: response.token,
+        isLoggedIn: true,
+        userDetail: response.data,
+      });
       toast.success(response.message);
       setLoading(false);
       navigate("/");

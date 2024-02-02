@@ -11,9 +11,8 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const authToken = useAuthStore((state) => state.authToken);
 
-  console.log(pathName.startsWith("/user"), "pathName.startsWitusr)");
   if ((!isLoggedIn || !authToken) && pathName.startsWith("/user")) {
-    console.log(!isLoggedIn || !authToken, "(!isLoggedIn || !authToken)");
+    console.log(isLoggedIn, authToken, "(!isLoggedIn || !authToken)");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
