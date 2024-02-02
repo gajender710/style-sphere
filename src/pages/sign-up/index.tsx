@@ -39,6 +39,7 @@ const SignUp = () => {
         password: loginData.password,
       };
       const response = await authServices.signUp(payload);
+      console.log(response, "sign up response");
       useAuthStore.setState({
         authToken: response.token,
         isLoggedIn: true,
